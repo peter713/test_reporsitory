@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2021-06-10T22:39:59 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reptest" language="groovy" pageWidth="6550" pageHeight="2340" orientation="Landscape" columnWidth="6550" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a2c2e279-6ca4-454e-8b5f-6cd87bedad91">
+<!-- 2021-06-10T22:42:08 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reptest" language="groovy" pageWidth="6750" pageHeight="2340" orientation="Landscape" columnWidth="6750" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a2c2e279-6ca4-454e-8b5f-6cd87bedad91">
 	<property name="ireport.zoom" value="0.9090909090909365"/>
 	<property name="ireport.x" value="4873"/>
 	<property name="ireport.y" value="0"/>
-	<property name="ireport.jasperserver.reportUnit" value="/Reports/POLOGNE/pl/MegaReport/PL_MEGA_FIN_FRD_STS_1"/>
+	<property name="ireport.jasperserver.reportUnit" value="/Reports/POLOGNE/pl/MegaReport/PL_MEGA_FIN_FRD_STS_test"/>
 	<property name="ireport.jasperserver.url" value="http://frlbmjas01:8180/jasperserver-pro/"/>
 	<property name="ireport.jasperserver.user" value="jasperadmin|CAT"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="n_pfor"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="ireport.jasperserver.report.resource" value="/Reports/POLOGNE/pl/MegaReport/PL_MEGA_FIN_FRD_STS_1_files/PL_MEGA_FIN_FRD_STS_jrxml"/>
+	<property name="ireport.jasperserver.report.resource" value="/Reports/POLOGNE/pl/MegaReport/PL_MEGA_FIN_FRD_STS_test_files/PL_MEGA_FIN_FRD_STS_jrxml"/>
 	<style name="Naglowek" mode="Opaque" backcolor="#CCCCCC"/>
 	<subDataset name="Table Dataset 1" uuid="f30a0faa-555d-421f-b90c-728101618ce5"/>
 	<parameter name="ARR_DATETIME_START" class="java.util.Date">
@@ -19,7 +19,7 @@
 	<parameter name="ARR_DATETIME_END" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="CREATOR_ID" class="java.util.List">
+	<parameter name="CREATOR_ID" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -119,6 +119,8 @@
        CO.HU_TYPE "HU",
        '' "ILOSC",
        (SELECT NAME FROM VS_SALES_REPRESENTATIVE WHERE PK = RU.SAR_FK) "REPRESENTATIVE"
+       ,TO_CHAR(CO.COSTING_DATE,'YYYY-MM-DD') "COSTING_DATE"
+       ,TO_CHAR(RT.COSTING_CLOSING_DATE,'YYYY-MM-DD') "COSTING_CLOSING_DATE"
 FROM VS_CUSORD CO
   LEFT JOIN VS_RATING RT ON CO.PK = RT.ORD_FK
   LEFT JOIN VS_CUSINV CI ON RT.CIN_FK = CI.PK
@@ -134,7 +136,7 @@ FROM VS_CUSORD CO
                                                                         WHERE TR.MASTER_OPS_FK IS NOT NULL) WHERE lg = 1) TR ON OP.PK = TR.MASTER_OPS_FK
 WHERE $X{IN,CREATOR_ID,CREATOR_ID}
 AND   CO.ORD_STATUS NOT IN ('XSU','SUS','DEL')
-AND   (CO.XACCOUNT_ID IN (SELECT DISTINCT TPA_ID FROM VS_CTT WHERE COMPANY_ID IN  ('PL85', 'LT95','HR35', 'UA75')) OR CO.XACCOUNT_ID = 'SCANIAFTL_SE_PL')
+AND   (CO.XACCOUNT_ID IN (SELECT DISTINCT TPA_ID FROM VS_CTT WHERE COMPANY_ID IN ('PL85', 'LT95','HR35', 'UA75')) OR CO.XACCOUNT_ID = 'SCANIAFTL_SE_PL')
 AND   TRUNC(CAST(NVL(TIME_ARR,EST_TIME_ARR) AS DATE)) BETWEEN TRUNC($P{ARR_DATETIME_START})
 AND   TRUNC($P{ARR_DATETIME_END}) + 0.99999
 AND   SUBSTR(CO.ORD_ID,0,4) IN ('COPL','COLT','COHR', 'COUA')]]>
@@ -198,13 +200,15 @@ AND   SUBSTR(CO.ORD_ID,0,4) IN ('COPL','COLT','COHR', 'COUA')]]>
 	<field name="HU" class="java.lang.String"/>
 	<field name="ILOSC" class="java.lang.String"/>
 	<field name="REPRESENTATIVE" class="java.lang.String"/>
+	<field name="COSTING_DATE" class="java.lang.String"/>
+	<field name="COSTING_CLOSING_DATE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="20">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="6550" height="20" backcolor="#99CCFF" uuid="de7b35fd-b2c8-47b4-916f-2fa027c7d4d0"/>
+				<reportElement mode="Opaque" x="0" y="0" width="6750" height="20" backcolor="#99CCFF" uuid="de7b35fd-b2c8-47b4-916f-2fa027c7d4d0"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[MEGA RAPORT FRD]]></text>
 			</staticText>
@@ -290,7 +294,7 @@ AND   SUBSTR(CO.ORD_ID,0,4) IN ('COPL','COLT','COHR', 'COUA')]]>
 			<staticText>
 				<reportElement mode="Opaque" x="1387" y="0" width="140" height="20" backcolor="#CCCCCC" uuid="89f94561-2c8c-4493-8dc6-746ee28bff29"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[LOCAL VALUE (PLN)]]></text>
+				<text><![CDATA[LOCAL VALUE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="1527" y="0" width="140" height="20" backcolor="#CCCCCC" uuid="cc2b8f89-4377-4575-bc6f-8f9f8c131975"/>
@@ -501,6 +505,20 @@ AND   SUBSTR(CO.ORD_ID,0,4) IN ('COPL','COLT','COHR', 'COUA')]]>
 				<reportElement mode="Opaque" x="6330" y="0" width="220" height="20" backcolor="#CCCCCC" uuid="0e9d9ff5-5e04-4381-904f-04c820d76231"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[BRAND]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="6550" y="0" width="100" height="20" backcolor="#CCCCCC" uuid="0349a32c-f6ab-4870-a306-99621bc422a0">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[COSTING_DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="6650" y="0" width="100" height="20" backcolor="#CCCCCC" uuid="b97bff06-f3df-4cf3-991e-caf41e7e4059">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[C.CLOSING_DATE]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -798,6 +816,20 @@ AND   SUBSTR(CO.ORD_ID,0,4) IN ('COPL','COLT','COHR', 'COUA')]]>
 				<reportElement x="6330" y="0" width="220" height="20" uuid="6a7d890e-ccfd-4844-92aa-29fa2827676d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{BRAND}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6550" y="0" width="100" height="20" uuid="bb40e541-c697-42f6-941f-b24a40803877">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COSTING_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="6650" y="0" width="100" height="20" uuid="fb51045f-9e72-4eb0-a5d2-0b815029e731">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COSTING_CLOSING_DATE}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
